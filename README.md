@@ -1,12 +1,13 @@
 # grunt-mustache [![Build Status](https://travis-ci.org/phun-ky/grunt-mustache.png)](https://travis-ci.org/phun-ky/grunt-mustache)
 
-> A grunt plugin to concatinate mustache template files into a valid JavaScript syntax file.
+> A grunt plugin to concatenate mustache template files into a valid JavaScript syntax file.
 
-This plugin does *NOT* bake JSON data with mustache templates. This plugin is created to handle the template baking with mustache/handlebars
-within a web projects internal JavaScript methods.
+This plugin does *NOT* bake JSON data with mustache templates. This
+plugin is created to handle the template baking with
+mustache/handlebars within a web projects internal JavaScript methods.
 
 ## Getting Started
-Install this grunt plugin next to your project's [Gruntfile.js][getting_started] with: 
+Install this grunt plugin next to your project's [Gruntfile.js][getting_started] with:
 
 `npm install grunt-mustache`
 
@@ -27,7 +28,9 @@ Add something like this in your gruntfile:
 	    options: {
 	      prefix: 'my.templates = ',
 	      postfix: ';',
-	      verbose: true
+	      verbose: true,
+        extension: 'mustache',
+        useFullPath: false
 	    }
 	  }
 	}
@@ -62,6 +65,19 @@ String to append the generated string. Defaults to `)` to give a valid JavaScrip
 * Defaults: `false`
 
 Toggle for verbose output.
+
+#### extension
+* Type: `String`
+* Defaults: `mustache`
+
+String to determine the file extension used to search for templates.
+
+#### useFullPath
+* Type: `Boolean`
+* Defaults: `false`
+
+Toggle to use the full/path/to/template as the filename key in the
+output.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
