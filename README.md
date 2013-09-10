@@ -97,5 +97,5 @@ _(Until v1.0.0, this will only be updated when major or breaking changes are mad
 
 
 ## License
-Copyright (c) 2012 Alexander Vassbotn Røyne-Helgesen  
-Licensed under the GPL license.
+Copyright (c) 2013 Alexander Vassbotn Røyne-Helgesen
+Licensed under the MIT license.
