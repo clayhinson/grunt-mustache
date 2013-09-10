@@ -27,7 +27,10 @@ module.exports = function(grunt) {
         node: true,
         es5: true
       },
-      globals: {}
+      globals: {
+        require: false,
+        module: true
+      }
     }
   });
 

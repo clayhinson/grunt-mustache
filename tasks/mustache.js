@@ -5,8 +5,8 @@
  * Copyright (c) 2012 Alexander Vassbotn Røyne-Helgesen
  * Modified 12/2012 Nils P. Ellingsen
  * Licensed under the GPL license.
+ *
  */
-
 'use strict';
 
 var templateContent = '';
@@ -25,40 +25,36 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('mustache', 'Concat mustache templates into a JSON string or JS object.', function() {
 
-    var _mustacheDest     = this.data.dest;
-    var _templateOutput   = '';
+    var _templateDest     = this.data.dest,
+        _opts             = this.options(),
+        _fileExt          = _opts.extension || 'mustache',
+        // Set *fixes, if not set, use () to produce correct JavaScript syntax
+        _prefix           = _opts.prefix || '(',
+        _postfix          = _opts.postfix || ')',
+        _templateOutput   = _prefix + '{';
 
-    var _opts = this.options();
-
-    // Set *fixes, if not set, use () to produce correct JavaScript syntax
-    var _prefix           = _opts.prefix || '(';
-    var _postfix          = _opts.postfix || ')';
-
-    
-    _templateOutput += _prefix + '{';
+    _opts.extension = _fileExt;
 
     this.filesSrc.forEach(function(file){
 
-
-
       grunt.file.recurse( file, function(abspath, rootdir, subdir, filename){
-        mustacheCallback(abspath, filename,_opts);
+        mustacheCallback(abspath, filename, _opts);
       });
       // replace any tabs and linebreaks and double spaces
       _templateOutput += templateContent.replace( /\r|\n|\t|\s\s/g, '');
+
     });
 
     templateContent = '';
     _templateOutput += ' "done": "true"}' + _postfix;
 
-    grunt.file.write(_mustacheDest, _templateOutput);
+    grunt.file.write(_templateDest, _templateOutput);
 
-    if(_opts.verbose){
-
-      grunt.log.writeln('File "' + _mustacheDest.yellow + '" created.');
+    if (_opts.verbose) {
+      grunt.log.writeln('File "' + _templateDest.yellow + '" created.');
     }
 
-    grunt.log.ok(String(templateCount).cyan + ' *.mustache templates baked into ' + _mustacheDest.yellow);
+    grunt.log.ok(String(templateCount).cyan + ' *.'+ _fileExt + ' templates baked into ' + _templateDest.yellow);
   });
 
   // ==========================================================================
@@ -66,12 +62,15 @@ module.exports = function(grunt) {
   // ==========================================================================
 
   function mustacheCallback(abspath, filename, opts){
-    // loop thru all mustache-files: using filename for key, template contents as value
-    if(abspath.split('.').pop() === 'mustache'){
-      templateCount++;
-      templateContent += '"' + filename.split('.mustache')[0] + '"' + ' : \'' + grunt.file.read(abspath) + '\',';
+    var useFullPath = opts.useFullPath || false,
+        fileKey = (useFullPath) ? abspath : filename.split('.'+opts.extension)[0];
 
-       if(opts.verbose){
+    // loop thru all template files: using filename for key, template contents as value
+    if (abspath.split('.').pop() === opts.extension) {
+      templateCount++;
+      templateContent += '"' + fileKey + '"' + ' : \'' + grunt.file.read(abspath) + '\',';
+
+      if (opts.verbose) {
         grunt.log.writeln('Reading file: '.white + filename.yellow);
       }
     }
